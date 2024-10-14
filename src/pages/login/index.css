@@ -1,0 +1,8 @@
+.login-inputs input.p-invalid:enabled:focus {
+  box-shadow: 0 0 0 0.15rem #fdaaaa;
+  border-color: #ff5757 !important;
+}
+
+.login-inputs .error-message {
+  color: #ff5757 !important;
+}
