@@ -9,7 +9,7 @@
         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-full"
         @click="
           () => {
-            showForm = false
+            showForm = 'tambahDokter'
             showFormButton = false
             currentTab = 'informasiDokter'
           }
@@ -23,17 +23,17 @@
       <button
         @click="
           () => {
-            showForm = true
+            showForm = 'home'
             showFormButton = true
           }
         "
-        v-else
+        v-if="!showFormButton"
         class="text-black font-bold -mt-5"
       >
         Kembali
       </button>
     </div>
-    <div class="p-10 mx-10 bg-white" v-if="showForm">
+    <div class="p-10 mx-10 bg-white" v-if="showForm === 'home'">
       <!-- Search Input -->
       <div class="mb-4 flex items-center space-x-4">
         <input
@@ -113,6 +113,13 @@
         <li>{{ dokter.status }}</li>
         <li>
           <button
+            @click="
+              () => {
+                showForm = 'detailDokter'
+                selectedDetailDokter = dokter
+                showFormButton = false
+              }
+            "
             class="bg-purple-500 hover:bg-purple-700 w-7 h-7 rounded-md"
           ></button>
         </li>
@@ -164,7 +171,7 @@
         </div>
       </div>
     </div>
-    <div class="p-10 mx-10 bg-white" v-else>
+    <div class="p-10 mx-10 bg-white" v-if="showForm === 'tambahDokter'">
       <div>
         <ul class="flex">
           <li
@@ -483,13 +490,255 @@
             class="bg-purple-600 border-2 shadow-md border-blue-9000 p-3 text-white rounded-xl px-36 justify-center mt-10"
             @click="
               () => {
-                showForm = true
+                showForm = 'home'
                 showFormButton = true
                 modalHandler = false
               }
             "
           >
             OKE
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-10 mx-10 bg-white" v-if="showForm === 'detailDokter'">
+      <div class="-mt-2">
+        <div class="flex mb-8 items-center">
+          <div
+            class="w-16 h-16 rounded-full bg-purple-500 border-2 border-white"
+          ></div>
+          <div class="flex flex-col ml-5">
+            <h1 class="font-semibold text-2xl">
+              {{ selectedDetailDokter?.nama }}
+            </h1>
+            <h1 class="text-slate-500 text-xl">
+              id : {{ selectedDetailDokter?.id }}
+            </h1>
+          </div>
+          <div class="ml-auto">
+            <!-- Gunakan ml-auto di sini -->
+            <button
+              class="text-white bg-blue-600 px-8 py-3 rounded-3xl text-xl"
+            >
+              EDIT DOKTER
+            </button>
+          </div>
+        </div>
+
+        <ul class="flex">
+          <li
+            @click="currentTab = 'informasiDokter'"
+            :class="
+              currentTab === 'informasiDokter'
+                ? 'text-purple-500 font-bold border-b-4 border-purple-500 text-xl mx-7'
+                : 'text-black cursor-pointer text-xl mx-7'
+            "
+          >
+            1. Informasi Dokter
+          </li>
+          <li
+            @click="currentTab = 'dokumentasi'"
+            :class="
+              currentTab === 'dokumentasi'
+                ? 'text-purple-500 font-bold border-b-4 border-purple-500 text-xl mr-7'
+                : 'text-black cursor-pointer text-xl mr-7'
+            "
+          >
+            2. Dokumentasi
+          </li>
+          <li
+            @click="currentTab = 'tempatPraktik'"
+            :class="
+              currentTab === 'tempatPraktik'
+                ? 'text-purple-500 font-bold border-b-4 border-purple-500 text-xl mr-5'
+                : 'text-black cursor-pointer text-xl mr-5'
+            "
+          >
+            3. Tempat Praktik
+          </li>
+        </ul>
+        <hr class="h-0.5 bg-gray-200 border-0 dark:bg-gray-400" />
+        <!-- Content Rendering -->
+        <div
+          v-if="currentTab === 'informasiDokter'"
+          class="h-full bg-gray-200 rounded-md m-1 mt-5 p-5"
+        >
+          <h1 class="font-bold text-xl">Biografi</h1>
+          <h1 class="font-light text-lg text-slate-600 mt-1">
+            Dokter {{ selectedDetailDokter?.nama }} merupakan seorang Spesialis
+            Dokter Anak yang telah mengabdi selama kurang lebih 5 tahun didunia
+            medis. Dokter Nur Nadila merupakan lulusan S1 Kedokteran Universitas
+            Indonesia pada tahun 2012 dan S2 Spesialisasi Anak Harvard
+            University pada tahun 2018.
+          </h1>
+          <div class="flex mt-5 items-center">
+            <h1 class="text-lg w-1/5">Nomor STR</h1>
+            <input
+              type="text"
+              value="Nomor STR"
+              readonly
+              required
+              class="m-1 rounded-md bg-white p-2 text-lg ml-4 w-full"
+            />
+          </div>
+          <div class="flex mt-5 items-center">
+            <h1 class="text-lg w-1/5">Tempat Lahir</h1>
+            <input
+              type="text"
+              value="Sleman"
+              readonly
+              required
+              class="m-1 rounded-md bg-white p-2 text-lg ml-4 w-full"
+            />
+          </div>
+          <div class="flex mt-5 items-center">
+            <h1 class="text-lg w-1/5">Tanggal Lahir</h1>
+            <input
+              type="text"
+              value="17 Agustus 1945"
+              readonly
+              required
+              class="m-1 rounded-md bg-white p-2 text-lg ml-4 w-full"
+            />
+          </div>
+          <div class="flex mt-5 items-center">
+            <h1 class="text-lg w-1/5">Jenis Kelamin</h1>
+            <input
+              type="text"
+              value="Laki-laki"
+              readonly
+              required
+              class="m-1 rounded-md bg-white p-2 text-lg ml-4 w-full"
+            />
+          </div>
+          <div class="flex mt-5 items-center">
+            <h1 class="text-lg w-1/5">Nomor Telepon</h1>
+            <input
+              type="number"
+              value="081234567890"
+              readonly
+              required
+              class="m-1 rounded-md bg-white p-2 text-lg ml-4 w-full"
+            />
+          </div>
+          <div class="flex mt-5 items-center">
+            <h1 class="text-lg w-1/5">Email</h1>
+            <input
+              type="text"
+              value="email@gmail.com"
+              readonly
+              required
+              class="m-1 rounded-md bg-white p-2 text-lg ml-4 w-full"
+            />
+          </div>
+          <div class="flex mt-5 items-center">
+            <h1 class="text-lg w-1/5">Spesialisasi</h1>
+            <input
+              type="text"
+              :value="selectedDetailDokter?.spesialis || 'Umum'"
+              readonly
+              required
+              class="m-1 rounded-md bg-white p-2 text-lg ml-4 w-full"
+            />
+          </div>
+        </div>
+
+        <div v-if="currentTab === 'dokumentasi'">
+          <div>
+            <h1 class="mt-5">Foto STR</h1>
+            <label
+              class="w-32 h-32 border-2 border-dashed border-slate-400 flex cursor-pointer justify-center items-center mt-3"
+            >
+              <span class="text-slate-500">Pilih Gambar</span>
+              <input type="file" accept="image/*" class="hidden" />
+            </label>
+            <h1 class="text-sm mt-3 text-slate-500">
+              *Format wajib .jpg / .jpeg / .png
+            </h1>
+            <h1 class="text-sm text-slate-500">*Maksimal file size 5 mb</h1>
+          </div>
+          <div>
+            <h1 class="mt-5">Foto SIP</h1>
+            <div class="flex">
+              <label
+                class="w-32 h-32 border-2 border-dashed border-slate-400 flex cursor-pointer justify-center items-center mt-3"
+              >
+                <span class="text-slate-500">Pilih Gambar</span>
+                <input type="file" accept="image/*" class="hidden" />
+              </label>
+              <label
+                class="w-32 h-32 border-2 border-dashed border-slate-400 flex cursor-pointer ml-4 justify-center items-center mt-3"
+              >
+                <span class="text-slate-500">Pilih Gambar</span>
+                <input type="file" accept="image/*" class="hidden" />
+              </label>
+            </div>
+            <h1 class="text-sm mt-3 text-slate-500">
+              *Format wajib .jpg / .jpeg / .png
+            </h1>
+            <h1 class="text-sm text-slate-500">*Maksimal file size 5 mb</h1>
+          </div>
+        </div>
+        <div class="flex justify-end mt-5">
+          <button
+            @click="currentTab = 'informasiDokter'"
+            v-if="currentTab === 'dokumentasi'"
+            class="px-20 py-4 bg-white border border-blue-600 text-blue-600 font-bold rounded-2xl mr-6"
+          >
+            Sebelumnya
+          </button>
+          <button
+            @click="currentTab = 'tempatPraktik'"
+            v-if="currentTab === 'dokumentasi'"
+            class="px-10 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl"
+          >
+            Simpan dan Selanjutnya
+          </button>
+        </div>
+
+        <div v-if="currentTab === 'tempatPraktik'">
+          <div class="flex justify-end mb-5 -mt-5">
+            <button
+              v-if="currentTab === 'tempatPraktik'"
+              class="px-10 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl mr-6"
+            >
+              Tambah Tempat Praktik
+            </button>
+          </div>
+          <ul
+            class="grid grid-cols-8 gap-8 text-left mb-2 text-slate-600 mt-11"
+          >
+            <li>Nama Faskes</li>
+            <li>Provider</li>
+            <li>No SIP</li>
+            <li>Layanan</li>
+            <li>Jenis Layanan</li>
+            <li>Harga Layanan</li>
+            <li>Jadwal</li>
+            <li>Aksi</li>
+          </ul>
+          <hr class="h-px my-4 bg-blue-200 border-0 dark:bg-gray-700" />
+        </div>
+        <div class="flex justify-end">
+          <button
+            @click="currentTab = 'dokumentasi'"
+            v-if="currentTab === 'tempatPraktik'"
+            class="px-16 py-4 bg-white border border-blue-600 text-blue-600 font-bold rounded-2xl mr-6"
+          >
+            Sebelumnya
+          </button>
+          <button
+            @click="
+              () => {
+                modalHandler = true
+                //addDoctor()
+              }
+            "
+            v-if="currentTab === 'tempatPraktik'"
+            class="px-10 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl mr-6"
+          >
+            Simpan Dokter
           </button>
         </div>
       </div>

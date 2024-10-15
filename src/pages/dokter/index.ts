@@ -1,5 +1,5 @@
-import { defineComponent, onMounted, ref, computed } from 'vue'
-import axios from 'axios'
+import { defineComponent, ref, computed } from 'vue'
+// import axios from 'axios'
 import dokter from './dataDummy'
 
 // const apiURL = 'http://localhost:3000/dokter'
@@ -32,9 +32,11 @@ export default defineComponent({
     const isSpesialisasiDropDownOpen = ref(false)
     const selectedSpesialisasi = ref(null)
     const modalHandler = ref(false)
+    const detailDokter = ref(false)
+    const selectedDetailDokter = ref('')
 
     // State untuk menambah dokter
-    const showForm = ref(true)
+    const showForm = ref('home')
     const nama = ref('')
     const provider = ref('')
     const spesialis = ref('')
@@ -106,14 +108,14 @@ export default defineComponent({
     }
 
     // Fetch data from API on mount
-    onMounted(async () => {
-      try {
-        const response = await axios.get('/api/dokter')
-        dokters.value = response.data // Pastikan respons dari API sesuai dengan tipe Dokter[]
-      } catch (error) {
-        console.log(error)
-      }
-    })
+    // onMounted(async () => {
+    //   try {
+    //     const response = await axios.get('/api/dokter')
+    //     dokters.value = response.data // Pastikan respons dari API sesuai dengan tipe Dokter[]
+    //   } catch (error) {
+    //     console.log(error)
+    //   }
+    // })
 
     // Fungsi untuk menambah dokter baru
     const tambahDokter = () => {
@@ -136,7 +138,7 @@ export default defineComponent({
       status.value = 'Aktif'
 
       // Sembunyikan formulir setelah menambah dokter
-      showForm.value = true
+      showForm.value = 'home'
     }
 
     // const tambahDokter = () => {
@@ -163,6 +165,8 @@ export default defineComponent({
     const spesialisasiToggleDropdown = () => {
       isSpesialisasiDropDownOpen.value = !isSpesialisasiDropDownOpen.value
     }
+
+    console.log(showForm)
 
     return {
       dokters,
@@ -193,6 +197,8 @@ export default defineComponent({
       showFormButton,
       isSpesialisasiDropDownOpen,
       selectedSpesialisasi,
+      detailDokter,
+      selectedDetailDokter,
       spesialisasiToggleDropdown,
       toggleDropdown,
       tambahDokter, // Menambahkan fungsi tambahDokter ke dalam return
