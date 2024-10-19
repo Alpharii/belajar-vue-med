@@ -5,34 +5,109 @@
         <h1 class="text-slate-600">Provider - Dokter</h1>
         <h1 class="text-blue-600 font-semibold text-3xl pt-10 -mt-5">Dokter</h1>
       </div>
-      <button
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-full"
-        @click="
-          () => {
-            showForm = 'tambahDokter'
-            showFormButton = false
-            currentTab = 'informasiDokter'
-          }
-        "
-        v-if="showFormButton"
-      >
-        + Tambah Dokter
-      </button>
+      <div class="justify-end flex flex-col">
+        <button
+          @click="
+            () => {
+              showForm = 'home'
+              showFormButton = true
+              currentTab = 'informasiDokter'
+            }
+          "
+          v-if="!showFormButton"
+          class="text-black font-bold py-5 pb-7 -mt-5 justify-end"
+        >
+          Kembali
+        </button>
+        <button
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-full"
+          @click="
+            () => {
+              showForm = 'tambahDokter'
+              showFormButton = false
+              currentTab = 'informasiDokter'
+            }
+          "
+          v-if="showFormButton"
+        >
+          + Tambah Dokter
+        </button>
 
-      <!-- Button untuk membatalkan form -->
-      <button
-        @click="
-          () => {
-            showForm = 'home'
-            showFormButton = true
-            currentTab = 'informasiDokter'
-          }
-        "
-        v-if="!showFormButton"
-        class="text-black font-bold -mt-5"
-      >
-        Kembali
-      </button>
+        <!-- Button untuk membatalkan form -->
+        <div class="relative" v-if="showForm === 'detailDokter'">
+          <button
+            @click="dropdownOpen = !dropdownOpen"
+            class="flex justify-between items-center font-bold text-purple-600 -mb-5 px-8 py-4 rounded-full border-purple-600 border-2 w-full"
+          >
+            {{ currentStatus }}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              class="w-5 h-5"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </button>
+
+          <!-- Dropdown menu -->
+          <div
+            v-if="dropdownOpen"
+            class="absolute bg-white border border-purple-600 mt-2 rounded shadow-lg w-full"
+          >
+            <ul>
+              <li
+                v-for="option in options"
+                :key="option.value"
+                class="px-4 py-2 hover:bg-purple-200 cursor-pointer flex items-center justify-between"
+              >
+                <div class="flex items-center">
+                  <!-- Checkmark icon for selected option -->
+                  <svg
+                    v-if="currentStatus === option.label"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    class="w-5 h-5 mr-2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                  {{ option.label }}
+                </div>
+
+                <!-- Trash icon for delete option -->
+                <svg
+                  v-if="option.value === 'delete'"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  class="w-5 h-5 text-red-600"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="p-10 mx-10 bg-white" v-if="showForm === 'home'">
       <!-- Search Input -->
@@ -689,22 +764,6 @@
             <h1 class="text-sm text-slate-500">*Maksimal file size 5 mb</h1>
           </div>
         </div>
-        <div class="flex justify-end mt-5">
-          <button
-            @click="currentTab = 'informasiDokter'"
-            v-if="currentTab === 'dokumentasi'"
-            class="px-20 py-4 bg-white border border-blue-600 text-blue-600 font-bold rounded-2xl mr-6"
-          >
-            Sebelumnya
-          </button>
-          <button
-            @click="currentTab = 'tempatPraktik'"
-            v-if="currentTab === 'dokumentasi'"
-            class="px-10 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl"
-          >
-            Simpan dan Selanjutnya
-          </button>
-        </div>
 
         <div v-if="currentTab === 'tempatPraktik'">
           <ul
@@ -720,27 +779,6 @@
             <li>Aksi</li>
           </ul>
           <hr class="h-px my-4 bg-blue-200 border-0 dark:bg-gray-700" />
-        </div>
-        <div class="flex justify-end">
-          <button
-            @click="currentTab = 'dokumentasi'"
-            v-if="currentTab === 'tempatPraktik'"
-            class="px-16 py-4 bg-white border border-blue-600 text-blue-600 font-bold rounded-2xl mr-6"
-          >
-            Sebelumnya
-          </button>
-          <button
-            @click="
-              () => {
-                modalHandler = true
-                //addDoctor()
-              }
-            "
-            v-if="currentTab === 'tempatPraktik'"
-            class="px-10 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl mr-6"
-          >
-            Simpan Dokter
-          </button>
         </div>
       </div>
     </div>
